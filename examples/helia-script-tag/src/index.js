@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   helia.libp2p.addEventListener('peer:connect', (evt) => {
     addToLog(`Connected to ${evt.detail.toString()}`)
   })
+
   helia.libp2p.addEventListener('peer:disconnect', (evt) => {
     addToLog(`Disconnected from ${evt.detail.toString()}`)
   })

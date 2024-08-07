@@ -15,6 +15,7 @@
     "build": "mkdir -p dist && cp src/browser/index.html src/browser/index.css dist && node esbuild.js",
     "start": "npm run build && esbuild --servedir=dist",
     "test": "npm run build && test-browser-example test",
+    "tsc": "tsc",
     "=== end ===": ""
   },
   "browserslist": "last 1 Chrome version",
