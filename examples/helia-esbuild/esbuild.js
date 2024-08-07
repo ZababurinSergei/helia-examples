@@ -2,12 +2,10 @@ import { build } from 'esbuild'
 
 build({
   entryPoints: ['./src/index.js'],
-  outfile: './dist/index.mjs',
+  outfile: './dist/index.js',
   sourcemap: 'linked',
-  bundle: true,
-  metafile: true,
   minify: true,
-  format: "esm",
+  bundle: true,
   define: {
     'process.env.NODE_DEBUG': 'false',
     global: 'globalThis'
