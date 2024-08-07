@@ -1,10 +1,17 @@
-import { unixfs } from '@helia/unixfs'
-import { createHelia } from 'helia'
-import protobuf from 'protobufjs';
-import pull from 'pull-stream';
-import { createFromBytes } from 'peer-id';
+// import { createNode } from './this/index.mjs'
 
-export { createHelia, unixfs, protobuf, pull, createFromBytes}
+console.log('---')
+// const node1 = await createNode()
+// const node2 = await createNode()
+// console.log('node1: ', node1)
+// console.log('node2: ', node2)
+// import { unixfs } from '@helia/unixfs'
+// import { createHelia } from 'helia'
+// import protobuf from 'protobufjs';
+// import pull from 'pull-stream';
+// import { createFromBytes } from 'peer-id';
+//
+// export { createHelia, unixfs, protobuf, pull, createFromBytes}
 // const App = async () => {
 //   const DOM = {
 //     output: () => document.getElementById('output'),

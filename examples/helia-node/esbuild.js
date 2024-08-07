@@ -1,7 +1,7 @@
 import { build } from 'esbuild'
 
 build({
-  entryPoints: ['./src/index.js'],
+  entryPoints: ['./src/browser/index.mjs'],
   outfile: './dist/index.mjs',
   sourcemap: 'linked',
   bundle: true,

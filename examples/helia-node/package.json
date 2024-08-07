@@ -8,10 +8,14 @@
   "license": "ISC",
   "author": "",
   "scripts": {
+    "=== node ===": "",
+    "run:node": "node ./src/node/index.mjs",
+    "=== browser ===": "",
     "clean": "rimraf ./dist",
-    "build": "mkdir -p dist && cp src/index.html src/style.css dist && node esbuild.js",
+    "build": "mkdir -p dist && cp src/browser/index.html src/browser/index.css dist && node esbuild.js",
     "start": "npm run build && esbuild --servedir=dist",
-    "test": "npm run build && test-browser-example test"
+    "test": "npm run build && test-browser-example test",
+    "=== end ===": ""
   },
   "browserslist": "last 1 Chrome version",
   "dependencies": {
