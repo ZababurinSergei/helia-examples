@@ -47,16 +47,6 @@ function App (): JSX.Element {
     }
   }, [])
 
-  const handleTextType = useCallback(async (resp: Response) => {
-    try {
-      setLoading('Waiting for full JSON data...')
-      const text = await resp.text()
-      setSuccess(text)
-    } catch (err) {
-      setError((err as Error).message)
-    }
-  }, [])
-
   const handleVideoType = useCallback(async (resp: Response) => {
     try {
       controller?.abort() // abort any ongoing requests
@@ -69,33 +59,7 @@ function App (): JSX.Element {
     }
   }, [])
 
-
-  const onFetchText = useCallback(async () => {
-    try {
-      controller?.abort() // abort any ongoing requests
-      setLoading(`Fetching text response...`)
-      const ctl = new AbortController()
-      setController(ctl)
-      const resp = await verifiedFetch(path, {
-        signal: ctl.signal,
-        headers: {
-          accept: 'application/vnd.ipld.dag-json'
-        }
-      })
-
-      await handleTextType(resp)
-    } catch (err: any) {
-      // TODO: simplify AbortErr handling to use err.name once https://github.com/libp2p/js-libp2p/pull/2446 is merged
-      if (err?.code === 'ABORT_ERR') {
-        return
-      }
-      if (err instanceof Error) {
-        setError(err.message)
-      }
-    }
-  }, [path, handleTextType])
-
-  const onFetchJson = useCallback(async (jsonType: 'json'  | 'dag-json' = 'json') => {
+  const onFetchJson = useCallback(async (jsonType: 'json' | 'text' | 'dag-json' = 'json') => {
     try {
       controller?.abort() // abort any ongoing requests
       setLoading(`Fetching ${jsonType} response...`)
@@ -104,10 +68,9 @@ function App (): JSX.Element {
       const resp = await verifiedFetch(path, {
         signal: ctl.signal,
         headers: {
-          accept: jsonType === 'json' ? 'application/json' : 'application/vnd.ipld.dag-json'
+          accept: jsonType === 'json' ? 'application/json' : jsonType === 'text' ? 'text/html; charset=utf-8' : 'application/vnd.ipld.dag-json'
         }
       })
-
       await handleJsonType(resp)
     } catch (err: any) {
       // TODO: simplify AbortErr handling to use err.name once https://github.com/libp2p/js-libp2p/pull/2446 is merged
@@ -269,7 +232,7 @@ function App (): JSX.Element {
             <button
                 className="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 id="button-fetch-dag-json"
-                onClick={async () => onFetchText()}
+                onClick={async () => onFetchJson('text')}
             >
               🔑 Fetch as text
             </button>

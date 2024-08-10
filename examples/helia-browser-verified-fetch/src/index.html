@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Fetch</title>
+  </head>
+  <body>
+    <div class="" id="root">
+        <div class="">
+            <section>
+                <div class="grid h-screen grid-cols-2">
+                    <div class="bg-teal-200 p-4">
+                        <div class="flex items-center space-x-4">
+<!--                            <a class="" href="https://github.com/ipfs/helia">-->
+<!--                                <img-->
+<!--                                    class="h-20"-->
+<!--                                    alt="Helia logo"-->
+<!--                                    src="https://unpkg.com/@helia/css@1.0.1/logos/helia-logo.svg"-->
+<!--                                />-->
+<!--                            </a>-->
+<!--                            <h1 class="text-2xl">-->
+<!--                                Verified Retrieval with-->
+<!--                                <a-->
+<!--                                    href="https://github.com/ipfs/helia-verified-fetch/tree/main/packages/verified-fetch"-->
+<!--                                >-->
+<!--                                    <strong class='underline'>@helia/verified-fetch-->
+<!--                                    </strong>-->
+<!--                                </a>-->
+<!--                            </h1>-->
+                        </div>
+                        <label class="block mt-4 mb-2 font-medium text-gray-900">
+                            IPFS path to fetch
+                        </label>
+                        <input
+                                type="text"
+                                id="ipfs-path"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="ipfs://... or ipns://"
+                                value=''
+                        />
+                        <button
+                                class="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                id="button-fetch-json"
+                            >
+                            🔑 Fetch as JSON
+                        </button>
+                        <button
+                                class="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                id="button-fetch-dag-json"
+                            >
+                            🔑 Fetch as dag-json
+                        </button>
+                        <button
+                                class="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                id="button-fetch-text"
+                            >
+                            🔑 Fetch as text
+                        </button>
+                        <button
+                                class="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                id="button-fetch-image"
+                        >
+                            🔑 Fetch as image
+                        </button>
+                        <button
+                                class="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                id="button-fetch-file"
+                        >
+                            🔑 Fetch & Download
+                        </button>
+                        <button
+                            class="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            id="button-fetch-auto"
+                        >
+                            🔑 Fetch auto
+                        </button>
+                        <button
+                                class="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                id="button-fetch-abort"
+                        >
+                            ❌ Abort request
+                        </button>
+
+                        <pre class="bg-black text-teal-300 rounded p-4 whitespace-pre-wrap break-words">
+Example Paths
+=========
+IPNS name 👇
+ipns://k51qzi5uqu5dhp48cti0590jyvwgxssrii0zdf19pyfsxwoqomqvfg6bg8qj3s
+
+DNSLink 👇
+ipns://tokens.uniswap.org
+
+JSON 👇
+ipfs://bagaaieracglt4ey6qsxtvzqsgwnsw3b6p2tb7nmx5wdgxur2zia7q6nnzh7q
+
+DAG-CBOR 👇
+ipfs://bafyreicnokmhmrnlp2wjhyk2haep4tqxiptwfrp2rrs7rzq7uk766chqvq
+
+UnixFS JSON 👇
+ipfs://bafybeia5ci747h54m2ybc4rf6yqdtm6nzdisxv57pk66fgubjsnnja6wq4
+
+dag-json 👇
+ipfs://baguqeerasords4njcts6vs7qvdjfcvgnume4hqohf65zsfguprqphs3icwea
+
+UnixFS image 👇
+ipfs://bafybeicklkqcnlvtiscr2hzkubjwnwjinvskffn4xorqeduft3wq7vm5u4
+
+UnixFS video 👇
+ipfs://bafybeicq6y27fphdisjtxaybzxold7dczhvxiiyn3bvkyht7b36lveerrm
+
+                        </pre>
+<!--                        <a href="https://github.com/ipfs-examples/helia-examples/tree/main/examples/helia-browser-verified-fetch"-->
+<!--                           class="text-2xl block mt-2 underline"-->
+<!--                        >-->
+<!--                            Source for example-->
+<!--                        </a>-->
+<!--                        <a-->
+<!--                            href="https://github.com/ipfs/helia-verified-fetch/tree/main/packages/verified-fetch"-->
+<!--                            class="text-2xl block mt-2 underline"-->
+<!--                        >-->
+<!--                            <code>@helia/verified-fetch</code>-->
+<!--                            API Docs-->
+<!--                        </a>-->
+                    </div>
+                    <div class="output">
+                        <div class="bg-red-300">
+                            <pre class="bg-black text-red-300 rounded p-4 whitespace-pre-wrap break-words">{err}</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script type="module" src="./index.mjs"></script>
+  </body>
+</html>
