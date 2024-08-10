@@ -2,6 +2,8 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/examples/helia-delegated-routing-v1-http-api" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/examples/helia-http-gateway" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/examples/universal-connectivity" vcs="Git" />
   </component>
 </project>

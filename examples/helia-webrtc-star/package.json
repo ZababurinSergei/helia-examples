@@ -1,0 +1,39 @@
+{
+  "name": "helia-webrtc-star",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Bundle Helia with esbuild",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "scripts": {
+    "node": "node ./node/helia-wrtc-star.mjs",
+    "clean": "rimraf ./dist",
+    "build": "mkdir -p dist && cp src/index.html src/style.css dist && node esbuild.js",
+    "start": "npm run build && esbuild --servedir=dist",
+    "test": "npm run build && test-browser-example test"
+  },
+  "browserslist": "last 1 Chrome version",
+  "dependencies": {
+    "@helia/unixfs": "^3.0.0",
+    "@libp2p/bootstrap": "^10.1.4",
+    "@libp2p/circuit-relay-v2": "^1.1.4",
+    "@libp2p/webrtc": "^4.1.4",
+    "@libp2p/webrtc-star": "^7.0.0",
+    "@libp2p/websockets": "^8.1.4",
+    "@libp2p/webtransport": "^4.1.4",
+    "@multiformats/multiaddr": "^12.3.0",
+    "helia": "^4.0.1",
+    "libp2p": "^1.8.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.8",
+    "@playwright/test": "^1.12.3",
+    "esbuild": "^0.20.0",
+    "playwright": "^1.12.3",
+    "process": "^0.11.10",
+    "rimraf": "^5.0.0",
+    "test-ipfs-example": "^1.0.0"
+  }
+}

@@ -47,6 +47,16 @@ function App (): JSX.Element {
     }
   }, [])
 
+  const handleTextType = useCallback(async (resp: Response) => {
+    try {
+      setLoading('Waiting for full JSON data...')
+      const text = await resp.text()
+      setSuccess(text)
+    } catch (err) {
+      setError((err as Error).message)
+    }
+  }, [])
+
   const handleVideoType = useCallback(async (resp: Response) => {
     try {
       controller?.abort() // abort any ongoing requests
@@ -59,7 +69,33 @@ function App (): JSX.Element {
     }
   }, [])
 
-  const onFetchJson = useCallback(async (jsonType: 'json' | 'dag-json' = 'json') => {
+
+  const onFetchText = useCallback(async () => {
+    try {
+      controller?.abort() // abort any ongoing requests
+      setLoading(`Fetching text response...`)
+      const ctl = new AbortController()
+      setController(ctl)
+      const resp = await verifiedFetch(path, {
+        signal: ctl.signal,
+        headers: {
+          accept: 'application/vnd.ipld.dag-json'
+        }
+      })
+
+      await handleTextType(resp)
+    } catch (err: any) {
+      // TODO: simplify AbortErr handling to use err.name once https://github.com/libp2p/js-libp2p/pull/2446 is merged
+      if (err?.code === 'ABORT_ERR') {
+        return
+      }
+      if (err instanceof Error) {
+        setError(err.message)
+      }
+    }
+  }, [path, handleTextType])
+
+  const onFetchJson = useCallback(async (jsonType: 'json'  | 'dag-json' = 'json') => {
     try {
       controller?.abort() // abort any ongoing requests
       setLoading(`Fetching ${jsonType} response...`)
@@ -71,6 +107,7 @@ function App (): JSX.Element {
           accept: jsonType === 'json' ? 'application/json' : 'application/vnd.ipld.dag-json'
         }
       })
+
       await handleJsonType(resp)
     } catch (err: any) {
       // TODO: simplify AbortErr handling to use err.name once https://github.com/libp2p/js-libp2p/pull/2446 is merged
@@ -193,77 +230,88 @@ function App (): JSX.Element {
             <div className="flex items-center space-x-4">
               <a className="" href="https://github.com/ipfs/helia">
                 <img
-                  className="h-20"
-                  alt="Helia logo"
-                  src="https://unpkg.com/@helia/css@1.0.1/logos/helia-logo.svg"
+                    className="h-20"
+                    alt="Helia logo"
+                    src="https://unpkg.com/@helia/css@1.0.1/logos/helia-logo.svg"
                 />
               </a>
               <h1 className="text-2xl">
-                Verified Retrieval with <a href="https://github.com/ipfs/helia-verified-fetch/tree/main/packages/verified-fetch"><strong className='underline'>@helia/verified-fetch</strong></a>
+                Verified Retrieval with <a
+                  href="https://github.com/ipfs/helia-verified-fetch/tree/main/packages/verified-fetch"><strong
+                  className='underline'>@helia/verified-fetch</strong></a>
               </h1>
             </div>
             <label className="block mt-4 mb-2 font-medium text-gray-900">
               IPFS path to fetch
             </label>
             <input
-              type="text"
-              id="ipfs-path"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="ipfs://... or ipns://"
-              onChange={onPathChange}
-              value={path}
+                type="text"
+                id="ipfs-path"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="ipfs://... or ipns://"
+                onChange={onPathChange}
+                value={path}
             />
             <button
-              className="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              id="button-fetch-json"
-              onClick={async () => onFetchJson('json')}
+                className="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                id="button-fetch-json"
+                onClick={async () => onFetchJson('json')}
             >
               🔑 Fetch as JSON
             </button>
             <button
-              className="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              id="button-fetch-dag-json"
-              onClick={async () => onFetchJson('dag-json')}
+                className="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                id="button-fetch-dag-json"
+                onClick={async () => onFetchJson('dag-json')}
             >
               🔑 Fetch as dag-json
             </button>
             <button
-              className="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              id="button-fetch-image"
-              onClick={onFetchImage}
+                className="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                id="button-fetch-dag-json"
+                onClick={async () => onFetchText()}
+            >
+              🔑 Fetch as text
+            </button>
+            <button
+                className="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                id="button-fetch-image"
+                onClick={onFetchImage}
             >
               🔑 Fetch as image
             </button>
             <button
-              className="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              id="button-fetch-file"
-              onClick={onFetchFile}
+                className="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                id="button-fetch-file"
+                onClick={onFetchFile}
             >
               🔑 Fetch & Download
             </button>
             <button
-              className="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              id="button-fetch-auto"
-              onClick={onFetchAuto}
+                className="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                id="button-fetch-auto"
+                onClick={onFetchAuto}
             >
               🔑 Fetch auto
             </button>
             <button
-              className="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              id="button-fetch-auto"
-              onClick={onAbort}
+                className="my-2 mr-2 btn btn-blue bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                id="button-fetch-auto"
+                onClick={onAbort}
             >
               ❌ Abort request
             </button>
 
             <pre className="bg-black text-teal-300 rounded p-4 whitespace-pre-wrap break-words">{helpText}</pre>
-            <a href="https://github.com/ipfs-examples/helia-examples/tree/main/examples/helia-browser-verified-fetch" className="text-2xl block mt-2 underline">Source for example</a>
-            <a href="https://github.com/ipfs/helia-verified-fetch/tree/main/packages/verified-fetch" className="text-2xl block mt-2 underline"><code>@helia/verified-fetch</code> API Docs</a>
+            <a href="https://github.com/ipfs-examples/helia-examples/tree/main/examples/helia-browser-verified-fetch"
+               className="text-2xl block mt-2 underline">Source for example</a>
+            <a href="https://github.com/ipfs/helia-verified-fetch/tree/main/packages/verified-fetch"
+               className="text-2xl block mt-2 underline"><code>@helia/verified-fetch</code> API Docs</a>
 
           </div>
 
           {/* Right 👇 */}
-          <Output loading={loading} output={output} err={err} />
+          <Output loading={loading} output={output} err={err}/>
         </div>
       </section>
     </div>

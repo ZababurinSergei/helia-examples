@@ -1,5 +1,7 @@
 /* global Helia, BlockstoreCore, DatastoreCore, HeliaUnixfs */
 
+import {PROTOCOL2} from "helia-lan-discovery/src/utils.js";
+
 const statusValueEl = document.getElementById('statusValue')
 const discoveredPeerCountEl = document.getElementById('discoveredPeerCount')
 const connectedPeerCountEl = document.getElementById('connectedPeerCount')
@@ -9,9 +11,13 @@ const nodeIdEl = document.getElementById('nodeId')
 
 document.addEventListener('DOMContentLoaded', async () => {
   const helia = window.helia = await instantiateHeliaNode()
+
+  console.log('----------------- >>>', helia.libp2p)
   window.heliaFs = await HeliaUnixfs.unixfs(helia)
 
   helia.libp2p.addEventListener('peer:discovery', (evt) => {
+
+    // console.log('####################################', evt)
     window.discoveredPeers.set(evt.detail.id.toString(), evt.detail)
     addToLog(`Discovered peer ${evt.detail.id.toString()}`)
   })
@@ -85,6 +91,7 @@ const instantiateHeliaNode = async () => {
     datastore,
     blockstore
   })
+
   addToLog('Created Helia instance')
 
   return heliaInstance

@@ -1,0 +1,3 @@
+[submodule "examples/helia-browser-verified-fetch/examples/helia-delegated-routing-v1-http-api"]
+	path = examples/helia-browser-verified-fetch/examples/helia-delegated-routing-v1-http-api
+	url = https://github.com/ZababurinSergei/helia-delegated-routing-v1-http-api

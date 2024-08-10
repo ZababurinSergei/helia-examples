@@ -3,7 +3,7 @@
 import { dagCbor } from '@helia/dag-cbor'
 import { createHelia } from 'helia'
 import { lpStream } from 'it-length-prefixed-stream'
-import { PROTOCOL } from './utils.js'
+import { PROTOCOL, PROTOCOL2 } from './utils.js'
 
 const helia = await createHelia()
 const heliaDagCbor = dagCbor(helia)
